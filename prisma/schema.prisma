@@ -1,0 +1,37 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model user {
+  id Int @id @default(autoincrement())
+
+  username    String        @unique
+  password    String
+  certificate certificate[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @default(now())
+}
+
+model certificate {
+  id Int @id @default(autoincrement())
+
+  content   String
+  userId    Int
+  user      user     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+model template {
+  id Int @id @default(autoincrement())
+
+  html      String
+  photo     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
